@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="ATBMTT_GiuaKy:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/ATBMTT_GiuaKy_jar</output-path>
+    <root id="archive" name="ATBMTT_GiuaKy.jar">
+      <element id="module-output" name="ATBMTT_GiuaKy" />
+    </root>
+  </artifact>
+</component>
