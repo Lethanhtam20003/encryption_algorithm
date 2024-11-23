@@ -1,11 +1,7 @@
 package org.example.view;
 
-import org.example.controler.MenuController;
-
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.AdjustmentEvent;
-import java.awt.event.AdjustmentListener;
 
 public class Menu extends JPanel {
     private JButton bt1;

@@ -2,6 +2,7 @@ package org.example.model.MaHoaDoiXungModel;
 
 import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -10,7 +11,6 @@ import java.security.SecureRandom;
 import java.util.Base64;
 
 public class AES {
-    // TODO AES
     private SecretKey key;
     private IvParameterSpec iv;
     private int keySize; //key size list: 128,192,256
@@ -20,12 +20,15 @@ public class AES {
 //    AES/CBC/PKCS5Padding (128)
 //    AES/ECB/NoPadding (128)
 //    AES/ECB/PKCS5Padding (128)
-    private  String algorithm = "AES/CBC/PKCS5Padding";
-    public AES() {
+    private final String algorithm = "AES/CBC/PKCS5Padding";
 
+    public AES() {
+        this.keySize = listKeySize[0];
+        this.iv = genIv();
     }
+
     public SecretKey genKey() throws NoSuchAlgorithmException {
-        KeyGenerator keyGen = KeyGenerator.getInstance(algorithm);
+        KeyGenerator keyGen = KeyGenerator.getInstance("AES");
         keyGen.init(keySize);
         return keyGen.generateKey();
     }
@@ -40,7 +43,6 @@ public class AES {
     public void loadIv(IvParameterSpec iv) {
         this.iv = iv;
     }
-
 
     public byte[] encryptStr(String plainText) throws InvalidAlgorithmParameterException, InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException {
         Cipher cipher = Cipher.getInstance(algorithm);
@@ -98,20 +100,36 @@ public class AES {
         return true;
     }
 
-    public String secretKeyToString(SecretKey key) {
-        return "";
-    }
-    public SecretKey stringToSecretKey(String secretKey) {
+    public SecretKey stringToSecretKey(String str) {
+        if(!(str.matches("^[A-Za-z0-9+/]*={0,2}$") && (str.length() % 4 == 0)))
+            return null;
+        byte[] encoded = Base64.getDecoder().decode(str);
+        if( encoded.length == 16 || encoded.length == 24 || encoded.length == 32) {
+            return new SecretKeySpec(Base64.getDecoder().decode(str), "AES");
+        }
         return null;
+    }
+
+    public String getAlgorithm() {
+        return algorithm;
     }
     public void setKeySize(int keySize) {
         this.keySize = keySize;
     }
-    public String getAlgorithm() {
-        return algorithm;
+
+
+    public SecretKey getKey() {
+        return key;
     }
 
-    public static void main(String[] args) {
+    public void setKey(SecretKey key) {
+        this.key = key;
+    }
 
+    public static void main(String[] args) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        AES aes = new AES();
+        aes.loadKey(aes.genKey());
+        String plaintext = "plaintext";
+        System.out.println(aes.encryptBase64(plaintext));
     }
 }

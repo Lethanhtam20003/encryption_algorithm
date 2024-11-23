@@ -88,30 +88,20 @@ public class DES {
         cos.close();
         return true;
     }
-    public String SecretKeyToString(SecretKey key) throws NoSuchAlgorithmException {
-        byte[] encoded = key.getEncoded();
-        return Base64.getEncoder().encodeToString(encoded);
+    public void setKeySize(int keySize) {
+        this.keySize = keySize;
+    }
+    public String getAlgorithm() {
+        return algorithm;
     }
     public SecretKey stringToSecretKey(String str){
+        if(!(str.matches("^[A-Za-z0-9+/]*={0,2}$") && (str.length() % 4 == 0)))
+            return null;
         if(Base64.getDecoder().decode(str).length == 8) {
             byte[] encoded = Base64.getDecoder().decode(str);
             return new SecretKeySpec(encoded, algorithm);
         }
         return null;
-    }
-    public void setKeySize(int keySize) {
-        this.keySize = keySize;
-    }
-    public boolean checkKey(SecretKey key) {
-        // check null
-        if(key == null){
-            return false;
-        }
-        // check size
-        if(8 != key.getEncoded().length){
-            return false;
-        }
-        return  true;
     }
     public static void main(String[] args) throws NoSuchAlgorithmException, NoSuchPaddingException, IOException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
         DES des = new DES();

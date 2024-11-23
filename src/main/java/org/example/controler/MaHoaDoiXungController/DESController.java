@@ -1,6 +1,7 @@
 package org.example.controler.MaHoaDoiXungController;
 
 import org.example.model.CheckFile;
+import org.example.model.KeyManager;
 import org.example.model.MaHoaDoiXungModel.DES;
 import org.example.view.MaHoaDoiXungView.DES_PANEL;
 import org.example.view.custom.DialogNotification;
@@ -102,7 +103,6 @@ public class DESController implements ActionListener {
         }
     }
 
-
     public void setKeySize(int keySize){
         this.model.setKeySize(keySize);
 
@@ -116,41 +116,29 @@ public class DESController implements ActionListener {
     public void eventGenKey(){
         try {
             key = model.GenKey();
-            view.getTfGenKey().setText(model.SecretKeyToString(key));
+            view.getTfGenKey().setText(KeyManager.getInstance().SecretKeyToString(key));
         } catch (NoSuchAlgorithmException ex) {
             throw new RuntimeException(ex);
         }
     }
     public void eventLoadKey() throws NoSuchAlgorithmException {
+        String gen = view.getTfGenKey().getText().trim();
+        String load = view.getTfLoadKey().getText().trim();
 //                 input load key empty
-        if(  view.getTfGenKey().getText().trim().equals("") && view.getTfLoadKey().getText().trim().equals("")){
+        if(gen.isEmpty() && load.isEmpty()){
 //                    notification
             DialogNotification dialog = new DialogNotification(frame, "Notification!", true); // true: Modal dialog
             dialog.setMessage("Key is empty.\n please add key!");
             dialog.setVisible(true);
 //                 add String key from user
-        }else if(!view.getTfLoadKey().getText().trim().equals("")){
+        }else if(!load.isEmpty()){
 //                  ep kieu string sang secrect key
-            String str = view.getTfLoadKey().getText().trim();
-            SecretKey keyTest = model.stringToSecretKey(str);
-            if(model.checkKey(keyTest)){
-                key = keyTest;
-                view.getTfLoadKey().setText(model.SecretKeyToString(key));
-                view.getLbKeyInfoShow().setText(model.SecretKeyToString(key));
-            }else{
-                DialogNotification dialog = new DialogNotification(frame, "Error!", true);
-                dialog.setMessage("Key is not valid. please change!");
-                dialog.setVisible(true);
-            }
+            SecretKey keyTest =model.stringToSecretKey(load );
+            setLoadKeyText(keyTest);
 //              add key from this tool
         }else {
-            try {
-                model.loadKey(key);
-                view.getTfLoadKey().setText(model.SecretKeyToString(key));
-                view.getLbKeyInfoShow().setText(model.SecretKeyToString(key));
-            } catch (NoSuchAlgorithmException ex) {
-                throw new RuntimeException(ex);
-            }
+            SecretKey keyTest = model.stringToSecretKey(gen );
+            setLoadKeyText(keyTest);
         }
     }
     public void eventEncryptStr(){
@@ -322,5 +310,15 @@ public class DESController implements ActionListener {
         }
 
     }
-
+    private void setLoadKeyText(SecretKey keyTest) throws NoSuchAlgorithmException {
+        if(keyTest != null){
+            model.loadKey(keyTest);
+            view.getTfLoadKey().setText("");
+            view.getLbKeyInfoShow().setText(KeyManager.getInstance().SecretKeyToString(keyTest));
+        }else{
+            DialogNotification dialog = new DialogNotification(frame, "Error!", true);
+            dialog.setMessage("Key is not valid. please change!");
+            dialog.setVisible(true);
+        }
+    }
 }

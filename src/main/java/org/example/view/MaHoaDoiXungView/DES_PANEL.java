@@ -39,6 +39,7 @@ public class DES_PANEL extends JPanel {
 // gen key
         JPanel pnGenKey = new JPanel(new GridLayout(1, 2,10,10));
         tfGenKey = new JTextField(10);
+        tfGenKey.setEditable(false);
         btGenKey = new JButton("GenKey");
         JPanel pn2 = new JPanel(new GridLayout(1,2,10,10));
         pn2.add(tfGenKey);

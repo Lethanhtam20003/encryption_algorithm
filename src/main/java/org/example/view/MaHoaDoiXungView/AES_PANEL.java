@@ -38,6 +38,7 @@ public class AES_PANEL extends JPanel {
 // gen key
         JPanel pnGenKey = new JPanel(new GridLayout(1, 2,10,10));
         tfGenKey = new JTextField(10);
+        tfGenKey.setEditable(false);
         btGenKey = new JButton("GenKey");
         JPanel pn2 = new JPanel(new GridLayout(1,2,10,10));
         pn2.add(tfGenKey);
@@ -58,20 +59,13 @@ public class AES_PANEL extends JPanel {
         pnLoadKey.add(pn3);
         pnLoadKey.setPreferredSize(new Dimension(0, 40));
 // key information
-        JLabel lblKeySize = new JLabel("Key Size:", SwingConstants.RIGHT);
-        lbKeySizeShow = new JLabel("56", SwingConstants.LEFT);
-
         JLabel lbkeyInfo = new JLabel("Key actived:", SwingConstants.RIGHT);
         lbKeyInfoShow = new JLabel("...", SwingConstants.LEFT);
 
-        lblKeySize.setFont(new FontCustom().titleFont3);
-        lbKeySizeShow.setFont(new FontCustom().titleFont3);
         lbkeyInfo.setFont(new FontCustom().titleFont3);
         lbKeyInfoShow.setFont(new FontCustom().titleFont3);
 
         JPanel pnKeyInfo = new JPanel(new GridLayout(1,4,10,10));
-        pnKeyInfo.add(lblKeySize);
-        pnKeyInfo.add(lbKeySizeShow);
         pnKeyInfo.add(lbkeyInfo);
         pnKeyInfo.add(lbKeyInfoShow);
 
@@ -220,4 +214,163 @@ public class AES_PANEL extends JPanel {
         this.add(pnContext, BorderLayout.CENTER);
     }
 
+    public JLabel getLbKeySizeShow() {
+        return lbKeySizeShow;
+    }
+
+    public void setLbKeySizeShow(JLabel lbKeySizeShow) {
+        this.lbKeySizeShow = lbKeySizeShow;
+    }
+
+    public JLabel getLbKeyInfoShow() {
+        return lbKeyInfoShow;
+    }
+
+    public void setLbKeyInfoShow(JLabel lbKeyInfoShow) {
+        this.lbKeyInfoShow = lbKeyInfoShow;
+    }
+
+    public JTextField getTfKeySize() {
+        return tfKeySize;
+    }
+
+    public void setTfKeySize(JTextField tfKeySize) {
+        this.tfKeySize = tfKeySize;
+    }
+
+    public JTextField getTfGenKey() {
+        return tfGenKey;
+    }
+
+    public void setTfGenKey(JTextField tfGenKey) {
+        this.tfGenKey = tfGenKey;
+    }
+
+    public JTextField getTfLoadKey() {
+        return tfLoadKey;
+    }
+
+    public void setTfLoadKey(JTextField tfLoadKey) {
+        this.tfLoadKey = tfLoadKey;
+    }
+
+    public JTextField getTfInputString() {
+        return tfInputString;
+    }
+
+    public void setTfInputString(JTextField tfInputString) {
+        this.tfInputString = tfInputString;
+    }
+
+    public JTextField getTfOutputString() {
+        return tfOutputString;
+    }
+
+    public void setTfOutputString(JTextField tfOutputString) {
+        this.tfOutputString = tfOutputString;
+    }
+
+    public JTextField getTfInputFile() {
+        return tfInputFile;
+    }
+
+    public void setTfInputFile(JTextField tfInputFile) {
+        this.tfInputFile = tfInputFile;
+    }
+
+    public JTextField getTfOutputFile() {
+        return tfOutputFile;
+    }
+
+    public void setTfOutputFile(JTextField tfOutputFile) {
+        this.tfOutputFile = tfOutputFile;
+    }
+
+    public JButton getBtGenKey() {
+        return btGenKey;
+    }
+
+    public void setBtGenKey(JButton btGenKey) {
+        this.btGenKey = btGenKey;
+    }
+
+    public JButton getBtnLoadKey() {
+        return btnLoadKey;
+    }
+
+    public void setBtnLoadKey(JButton btnLoadKey) {
+        this.btnLoadKey = btnLoadKey;
+    }
+
+    public JButton getBtEncryptString() {
+        return btEncryptString;
+    }
+
+    public void setBtEncryptString(JButton btEncryptString) {
+        this.btEncryptString = btEncryptString;
+    }
+
+    public JButton getBtDecryptString() {
+        return btDecryptString;
+    }
+
+    public void setBtDecryptString(JButton btDecryptString) {
+        this.btDecryptString = btDecryptString;
+    }
+
+    public JButton getBtEncryptFile() {
+        return btEncryptFile;
+    }
+
+    public void setBtEncryptFile(JButton btEncryptFile) {
+        this.btEncryptFile = btEncryptFile;
+    }
+
+    public JButton getBtDecryptFile() {
+        return btDecryptFile;
+    }
+
+    public void setBtDecryptFile(JButton btDecryptFile) {
+        this.btDecryptFile = btDecryptFile;
+    }
+
+    public JButton getBtKeySize() {
+        return btKeySize;
+    }
+
+    public void setBtKeySize(JButton btKeySize) {
+        this.btKeySize = btKeySize;
+    }
+
+    public JButton getBtChooseFile() {
+        return btChooseFile;
+    }
+
+    public void setBtChooseFile(JButton btChooseFile) {
+        this.btChooseFile = btChooseFile;
+    }
+
+    public JButton getBtResultFile() {
+        return btResultFile;
+    }
+
+    public void setBtResultFile(JButton btResultFile) {
+        this.btResultFile = btResultFile;
+    }
+
+    public AES getModel() {
+        return model;
+    }
+
+    public void setModel(AES model) {
+        this.model = model;
+    }
+
+    public AESController getController() {
+        return controller;
+    }
+
+    public void setController(AESController controller) {
+        this.controller = controller;
+    }
 }

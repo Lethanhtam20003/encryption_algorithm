@@ -31,8 +31,12 @@ public class MainView extends JFrame {
         panelShow = new PanelContent();
         panelShow.addPanelNew(new DES_PANEL(this));
 
+        JPanel pnE = new JPanel();
+        pnE.add(Box.createRigidArea(new Dimension(150, 10)));
+
         contentPane.add(menu, BorderLayout.WEST);
         contentPane.add(panelShow, BorderLayout.CENTER);
+        contentPane.add(pnE, BorderLayout.EAST);
 
         this.setContentPane(contentPane);
 
