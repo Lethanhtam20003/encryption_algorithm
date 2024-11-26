@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class DialogNotification extends Dialog {
+public class DialogNotification extends JDialog {
     private final JPanel buttonPanel;
     private JLabel lblTitle;
     private JTextArea txtArea;
@@ -14,8 +14,11 @@ public class DialogNotification extends Dialog {
         this.setSize(300, 200);
         this.setLocationRelativeTo(owner);
         this.setLayout(new BorderLayout());
+        this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+
         lblTitle = new JLabel("Notification !");
         lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
+
         // Nội dung của JDialog
         txtArea = new JTextArea();
         txtArea.setEditable(false);

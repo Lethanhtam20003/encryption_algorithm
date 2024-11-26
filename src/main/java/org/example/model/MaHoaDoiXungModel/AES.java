@@ -1,6 +1,7 @@
 package org.example.model.MaHoaDoiXungModel;
 
 import javax.crypto.*;
+import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
@@ -15,12 +16,11 @@ public class AES {
     private IvParameterSpec iv;
     private int keySize; //key size list: 128,192,256
     public int[] listKeySize = {128,192,256};
+    private Cipher cipher;
+    private String[] listAlgorithm = {"AES/ECB/PKCS5Padding", "AES/CBC/PKCS5Padding",
+                            "AES/CFB8/NoPadding", "AES/OFB/NoPadding","AES/GCM/NoPadding"};
 
-//    AES/CBC/NoPadding (128)
-//    AES/CBC/PKCS5Padding (128)
-//    AES/ECB/NoPadding (128)
-//    AES/ECB/PKCS5Padding (128)
-    private final String algorithm = "AES/CBC/PKCS5Padding";
+    private String algorithm = listAlgorithm[0];
 
     public AES() {
         this.keySize = listKeySize[0];
@@ -45,13 +45,28 @@ public class AES {
     }
 
     public byte[] encryptStr(String plainText) throws InvalidAlgorithmParameterException, InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException {
-        Cipher cipher = Cipher.getInstance(algorithm);
-        cipher.init(Cipher.ENCRYPT_MODE, key, iv);
+        cipher = Cipher.getInstance(algorithm);
+        if(algorithm.equals(listAlgorithm[0])) {
+            cipher.init(Cipher.ENCRYPT_MODE, key);
+        }else if(algorithm.equals(listAlgorithm[listAlgorithm.length-1])){
+            byte[] ivGCM = new byte[12];
+            SecureRandom.getInstanceStrong().nextBytes(ivGCM);
+            GCMParameterSpec spec = new GCMParameterSpec(128,ivGCM);
+            cipher.init(Cipher.ENCRYPT_MODE, key, spec);
+        }else cipher.init(Cipher.ENCRYPT_MODE, key, iv);
         return cipher.doFinal(plainText.getBytes());
     }
     public String decryptStr(byte[] cipherText) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
-        Cipher cipher = Cipher.getInstance(algorithm);
-        cipher.init(Cipher.DECRYPT_MODE, key, iv);
+        cipher = Cipher.getInstance(algorithm);
+        System.out.println(algorithm);
+        if(algorithm.equals(listAlgorithm[0])) {
+            cipher.init(Cipher.DECRYPT_MODE, key);
+        }else if(algorithm.equals(listAlgorithm[listAlgorithm.length-1])){
+            byte[] ivGCM = new byte[12];
+            SecureRandom.getInstanceStrong().nextBytes(ivGCM);
+            GCMParameterSpec spec = new GCMParameterSpec(128,ivGCM);
+            cipher.init(Cipher.DECRYPT_MODE, key, spec);
+        }else cipher.init(Cipher.DECRYPT_MODE, key, iv);
         byte[] plainText = cipher.doFinal(cipherText);
         return new String(plainText);
     }
@@ -62,13 +77,23 @@ public class AES {
         return decryptStr(Base64.getDecoder().decode(cipherText));
     }
     public boolean encryptFile(String pathIn,String pathOut) throws NoSuchPaddingException, NoSuchAlgorithmException, IOException, InvalidAlgorithmParameterException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
-        Cipher cipher = Cipher.getInstance(algorithm);
-        cipher.init(Cipher.ENCRYPT_MODE, key, iv);
+        GCMParameterSpec spec = null;
+        cipher = Cipher.getInstance(algorithm);
+        if(algorithm.equals(listAlgorithm[0])) {
+            cipher.init(Cipher.ENCRYPT_MODE, key);
+        }else if(algorithm.equals(listAlgorithm[listAlgorithm.length-1])){
+            byte[] ivGCM = new byte[12];
+            SecureRandom.getInstanceStrong().nextBytes(ivGCM);
+            spec = new GCMParameterSpec(128,ivGCM);
+            cipher.init(Cipher.ENCRYPT_MODE, key, spec);
+        }else cipher.init(Cipher.ENCRYPT_MODE, key, iv);
 
-        try(
-                BufferedInputStream bis = new BufferedInputStream(new FileInputStream(pathIn));
+        try(    BufferedInputStream bis = new BufferedInputStream(new FileInputStream(pathIn));
                 BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(pathOut))){
-            bos.write(iv.getIV()); // ghi iv vao dau tep
+            if(algorithm.equals(listAlgorithm[listAlgorithm.length-1])) {
+                bos.write(spec.getIV());
+            }else
+                bos.write(iv.getIV()); // ghi iv vao dau tep
             try(CipherInputStream cis = new CipherInputStream(bis, cipher)) {
                 byte[] buffer = new byte[1024];
                 int bytesRead;
@@ -85,10 +110,21 @@ public class AES {
 
         try(BufferedInputStream bis = new BufferedInputStream(new FileInputStream(pathIn));
              BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(pathOut))) {
-            byte[] ivBytes = new byte[16];
-            bis.read(ivBytes);
-            IvParameterSpec iv = new IvParameterSpec(ivBytes);
-            cipher.init(Cipher.DECRYPT_MODE,key,iv);
+
+
+            if(algorithm.equals(listAlgorithm[0])) {
+                cipher.init(Cipher.DECRYPT_MODE, key);
+            }else if(algorithm.equals(listAlgorithm[listAlgorithm.length-1])){
+                byte[] ivGCM = new byte[12];
+                bis.read(ivGCM);
+                GCMParameterSpec spec = new GCMParameterSpec(128,ivGCM);
+                cipher.init(Cipher.DECRYPT_MODE, key, spec);
+            }else{
+                byte[] ivBytes = new byte[16];
+                bis.read(ivBytes);
+                IvParameterSpec iv = new IvParameterSpec(ivBytes);
+                cipher.init(Cipher.DECRYPT_MODE,key,iv);
+            }
             try(CipherOutputStream cos = new CipherOutputStream(bos, cipher)){
                 byte[] read = new byte[1024];
                 int length;
@@ -97,6 +133,7 @@ public class AES {
                 }
             }
         }
+
         return true;
     }
 
@@ -124,6 +161,18 @@ public class AES {
 
     public void setKey(SecretKey key) {
         this.key = key;
+    }
+
+    public String[] getListAlorithm() {
+        return listAlgorithm;
+    }
+
+    public void setListAlorithm(String[] listAlorithm) {
+        this.listAlgorithm = listAlorithm;
+    }
+
+    public void setAlgorithm(String algorithm) {
+        this.algorithm = algorithm;
     }
 
     public static void main(String[] args) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {

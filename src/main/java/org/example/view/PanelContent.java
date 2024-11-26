@@ -1,8 +1,5 @@
 package org.example.view;
 
-import org.example.view.MaHoaDoiXungView.AES_PANEL;
-import org.example.view.MaHoaDoiXungView.DES_PANEL;
-
 import javax.swing.*;
 import java.awt.*;
 

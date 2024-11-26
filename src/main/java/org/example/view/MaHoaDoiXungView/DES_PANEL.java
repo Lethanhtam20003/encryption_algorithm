@@ -1,22 +1,24 @@
 package org.example.view.MaHoaDoiXungView;
 
 import org.example.controler.MaHoaDoiXungController.DESController;
-import org.example.view.custom.FontCustom;
 import org.example.model.MaHoaDoiXungModel.DES;
+import org.example.view.custom.FontCustom;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 public class DES_PANEL extends JPanel {
-    private final JLabel lbKeySizeShow,lbKeyInfoShow;
+    private final JLabel lbKeyInfoShow;
     private JTextField tfKeySize,tfGenKey,tfLoadKey,tfInputString,tfOutputString,tfInputFile,tfOutputFile;
     private JButton btGenKey,btnLoadKey,btEncryptString,btDecryptString,btEncryptFile,btDecryptFile,btKeySize,btChooseFile,btResultFile;
-    private DES des;
+    private DES model;
     private DESController controller;
     private int[] listKeySize = {56};
     public DES_PANEL(Frame frame) {
-        des = new DES();
-        controller = new DESController(this,des,frame);
+        model = new DES();
+        controller = new DESController(this, model, frame);
         this.setLayout(new BorderLayout());
         JLabel title = new JLabel("Algorithm DES", JLabel.CENTER);
         title.setFont(new FontCustom().titleFont);
@@ -60,22 +62,33 @@ public class DES_PANEL extends JPanel {
         pnLoadKey.add(pn3);
         pnLoadKey.setPreferredSize(new Dimension(0, 40));
 // key information
-        JLabel lblKeySize = new JLabel("Key Size:", SwingConstants.RIGHT);
-        lbKeySizeShow = new JLabel("56", SwingConstants.LEFT);
-
         JLabel lbkeyInfo = new JLabel("Key actived:", SwingConstants.RIGHT);
         lbKeyInfoShow = new JLabel("...", SwingConstants.LEFT);
-
-        lblKeySize.setFont(new FontCustom().titleFont3);
-        lbKeySizeShow.setFont(new FontCustom().titleFont3);
         lbkeyInfo.setFont(new FontCustom().titleFont3);
         lbKeyInfoShow.setFont(new FontCustom().titleFont3);
-
         JPanel pnKeyInfo = new JPanel(new GridLayout(1,4,10,10));
-        pnKeyInfo.add(lblKeySize);
-        pnKeyInfo.add(lbKeySizeShow);
         pnKeyInfo.add(lbkeyInfo);
         pnKeyInfo.add(lbKeyInfoShow);
+// algorithm mode
+        JLabel lbAgorithmMode = new JLabel("Agorithm Mode:", SwingConstants.RIGHT);
+        lbAgorithmMode.setFont(new FontCustom().titleFont3);
+        JComboBox<String> cbAlgorithmMode = new JComboBox<>(model.getListAlorithm());
+        cbAlgorithmMode.setSelectedIndex(0);
+        cbAlgorithmMode.setFont(new FontCustom().titleFont3);
+        cbAlgorithmMode.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                // Kiểm tra nếu item được chọn (ItemEvent.SELECTED)
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    String selectedOption = (String) e.getItem();
+                    model.setAlgorithm(selectedOption);
+                }
+            }
+        });
+        JPanel pn4 = new JPanel(new GridLayout(1, 4, 10, 10));
+        pn4.add(lbAgorithmMode);
+        pn4.add(cbAlgorithmMode);
+        pn4.setPreferredSize(new Dimension(0, 40));
 
 // chuoi
         JPanel pnSting = new JPanel();
@@ -215,6 +228,8 @@ public class DES_PANEL extends JPanel {
         pnContext.add(pnLoadKey);
         pnContext.add(Box.createRigidArea(new Dimension(0, 15)));//        margin
         pnContext.add(pnKeyInfo);
+        pnContext.add(Box.createRigidArea(new Dimension(0, 15)));//
+        pnContext.add(pn4);
         pnContext.add(Box.createRigidArea(new Dimension(0, 15)));//        margin
         pnContext.add(pnSting);
         pnContext.add(Box.createRigidArea(new Dimension(0, 15)));//        margin
@@ -342,20 +357,16 @@ public class DES_PANEL extends JPanel {
         this.listKeySize = listKeySize;
     }
 
-    public JLabel getLbKeySizeShow() {
-        return lbKeySizeShow;
-    }
-
     public JLabel getLbKeyInfoShow() {
         return lbKeyInfoShow;
     }
 
-    public DES getDes() {
-        return des;
+    public DES getModel() {
+        return model;
     }
 
-    public void setDes(DES des) {
-        this.des = des;
+    public void setModel(DES model) {
+        this.model = model;
     }
 
     public DESController getController() {

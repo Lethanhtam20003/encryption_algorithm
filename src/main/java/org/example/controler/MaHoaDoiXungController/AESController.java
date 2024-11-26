@@ -1,7 +1,9 @@
 package org.example.controler.MaHoaDoiXungController;
 
+import org.example.model.CheckFile;
 import org.example.model.KeyManager;
 import org.example.model.MaHoaDoiXungModel.AES;
+import org.example.view.FileManager;
 import org.example.view.MaHoaDoiXungView.AES_PANEL;
 import org.example.view.custom.DialogNotification;
 
@@ -13,6 +15,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -79,18 +82,55 @@ public class AESController implements ActionListener {
                 }
                 break;
             case "ChooseFileIn":
+                eventChooseFleIn();
                 break;
             case "ChooseFileOut":
+                view.getTfOutputFile().setText(FileManager.getInstance().chooseFileToSave(frame));
                 break;
             case "Encrypt file":
+                try {
+                    eventEncryptFile();
+                } catch (InvalidAlgorithmParameterException ex) {
+                    throw new RuntimeException(ex);
+                } catch (NoSuchPaddingException ex) {
+                    throw new RuntimeException(ex);
+                } catch (IllegalBlockSizeException ex) {
+                    throw new RuntimeException(ex);
+                } catch (NoSuchAlgorithmException ex) {
+                    throw new RuntimeException(ex);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                } catch (BadPaddingException ex) {
+                    throw new RuntimeException(ex);
+                } catch (InvalidKeyException ex) {
+                    throw new RuntimeException(ex);
+                }
                 break;
             case "Decrypt file":
+                try {
+                    eventDecryptFile();
+                } catch (InvalidAlgorithmParameterException ex) {
+                    throw new RuntimeException(ex);
+                } catch (NoSuchPaddingException ex) {
+                    throw new RuntimeException(ex);
+                } catch (IllegalBlockSizeException ex) {
+                    throw new RuntimeException(ex);
+                } catch (NoSuchAlgorithmException ex) {
+                    throw new RuntimeException(ex);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                } catch (BadPaddingException ex) {
+                    throw new RuntimeException(ex);
+                } catch (InvalidKeyException ex) {
+                    throw new RuntimeException(ex);
+                }
                 break;
             default:
                 break;
         }
 
     }
+
     private void changeKeySise() {
         Dialog dialog = new Dialog(frame, "Change Key Sise",false);
         dialog.setLayout(new BorderLayout(5, 5));
@@ -193,6 +233,34 @@ public class AESController implements ActionListener {
         }
     }
 
+    private void eventEncryptFile() throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, IOException, BadPaddingException, InvalidKeyException {
+        if (checkBeforEncryptionFile()) {
+            if (model.encryptFile(view.getTfInputFile().getText(), view.getTfOutputFile().getText())) {
+                DialogNotification dialog = new DialogNotification(frame, "Notification!", true);
+                dialog.setMessage("encrypted file successfully!");
+                dialog.setVisible(true);
+            } else {
+                DialogNotification dialog = new DialogNotification(frame, "Error!", true);
+                dialog.setMessage("encrypted file is not valid!");
+                dialog.setVisible(true);
+            }
+        }
+    }
+
+    private void eventDecryptFile() throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, IOException, BadPaddingException, InvalidKeyException {
+        if (checkBeforEncryptionFile()) {
+          if (model.decryptFile(view.getTfInputFile().getText(), view.getTfOutputFile().getText())) {
+            DialogNotification dialog = new DialogNotification(frame, "Encryption successful!", true);
+            dialog.setMessage("decrypted file successfully!");
+            dialog.setVisible(true);
+          }else{
+              DialogNotification dialog = new DialogNotification(frame, "Error!", true);
+              dialog.setMessage("Decrypted file is not valid!");
+              dialog.setVisible(true);
+          }
+        }
+    }
+
     private int checkBeforEncryption() {
         if (model.getKey() == null) {
             return 1;
@@ -203,6 +271,54 @@ public class AESController implements ActionListener {
         return 0;
     }
 
+    private boolean checkBeforEncryptionFile() {
+        CheckFile checkFile = CheckFile.getInstance();
+        if (model.getKey() == null) {
+            DialogNotification dialog = new DialogNotification(frame, "Notification!", true);
+            dialog.setMessage("empty key");
+            dialog.setVisible(true);
+            return false;
+        }
+        String pathIn = view.getTfInputFile().getText().trim();
+        String pathOut = view.getTfOutputFile().getText().trim();
+        if (pathIn.equals("") || pathOut.equals("")) {
+            DialogNotification dialog = new DialogNotification(frame, "Notification!", true);
+            dialog.setMessage("empty file");
+            dialog.setVisible(true);
+            return false;
+        }
+        if (!checkFile.checkFileExisted(pathIn)) {
+            DialogNotification dialogNotification1 = new DialogNotification(frame, "Error!", true);
+            dialogNotification1.setMessage("The system cannot find the file specified to encryption");
+            dialogNotification1.setVisible(true);
+            return false;
+        }
+        if (!checkFile.checkDirectoryExisted(pathOut)) {
+            DialogNotification dialogNotification1 = new DialogNotification(frame, "Error!", true);
+            dialogNotification1.setMessage("The system cannot find the Directory specified to save file!");
+            dialogNotification1.setVisible(true);
+            return false;
+        }
+        if (checkFile.checkFileExisted(pathOut)) {
+            DialogNotification dialogNotification1 = new DialogNotification(frame, "Error!", true);
+            dialogNotification1.setMessage("The file result has existed! please change.");
+            dialogNotification1.setVisible(true);
+            return false;
 
+        }
+        return true;
+
+    }
+
+    private void eventChooseFleIn() {
+        String file = FileManager.getInstance().chosoeFile(frame);
+        view.getTfInputFile().setText(file);
+        if (!file.endsWith(".crypt")) {
+            file += ".crypt";
+        } else {
+            file = file.replace(".crypt", "");
+        }
+        view.getTfOutputFile().setText(file);
+    }
 
 }

@@ -3,6 +3,17 @@ package org.example.model;
 import java.io.File;
 
 public class CheckFile {
+    public static CheckFile instance;
+
+    public CheckFile() {
+    }
+
+    public static CheckFile getInstance() {
+        if (instance == null) {
+            instance = new CheckFile();
+        }
+        return instance;
+    }
 
     public boolean checkFileExisted(String path) {
         return new File(path).exists();

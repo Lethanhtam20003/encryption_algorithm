@@ -14,9 +14,9 @@ public class MainView extends JFrame {
     private Menu menu;
     private PanelContent panelShow;
 
-    public MainView() {
+    public MainView() throws UnsupportedLookAndFeelException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setDefaultLookAndFeelDecorated(true);
+        UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
         setLocationRelativeTo(null);
         setExtendedState(JFrame.MAXIMIZED_BOTH); // Maximized
         generationView();
@@ -32,7 +32,7 @@ public class MainView extends JFrame {
         panelShow.addPanelNew(new DES_PANEL(this));
 
         JPanel pnE = new JPanel();
-        pnE.add(Box.createRigidArea(new Dimension(150, 10)));
+        pnE.add(Box.createRigidArea(new Dimension(300, 10)));
 
         contentPane.add(menu, BorderLayout.WEST);
         contentPane.add(panelShow, BorderLayout.CENTER);
@@ -49,6 +49,7 @@ public class MainView extends JFrame {
         menu.getBtMD5().addActionListener(menuListener);
         menu.getBtSHA().addActionListener(menuListener);
         menu.getBtFileChecksum().addActionListener(menuListener);
+
     }
 
     private ActionListener createActionMenu() {

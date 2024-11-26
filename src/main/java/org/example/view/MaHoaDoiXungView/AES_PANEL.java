@@ -6,6 +6,8 @@ import org.example.view.custom.FontCustom;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 public class AES_PANEL extends JPanel {
     private JLabel lbKeySizeShow,lbKeyInfoShow;
@@ -13,6 +15,7 @@ public class AES_PANEL extends JPanel {
     private JButton btGenKey,btnLoadKey,btEncryptString,btDecryptString,btEncryptFile,btDecryptFile,btKeySize,btChooseFile,btResultFile;
     private AES model;
     private AESController controller;
+
     public AES_PANEL(Frame frame) {
         model = new AES();
         controller = new AESController(this, model,frame);
@@ -68,6 +71,27 @@ public class AES_PANEL extends JPanel {
         JPanel pnKeyInfo = new JPanel(new GridLayout(1,4,10,10));
         pnKeyInfo.add(lbkeyInfo);
         pnKeyInfo.add(lbKeyInfoShow);
+        // algorithm mode
+        JLabel lbAgorithmMode = new JLabel("Agorithm Mode:", SwingConstants.RIGHT);
+        lbAgorithmMode.setFont(new FontCustom().titleFont3);
+        JComboBox<String> cbAlgorithmMode = new JComboBox<>(model.getListAlorithm());
+        cbAlgorithmMode.setSelectedIndex(0);
+        cbAlgorithmMode.setFont(new FontCustom().titleFont3);
+        cbAlgorithmMode.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                // Kiểm tra nếu item được chọn (ItemEvent.SELECTED)
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    String selectedOption = (String) e.getItem();
+                    model.setAlgorithm(selectedOption);
+                }
+            }
+        });
+        JPanel pn4 = new JPanel(new GridLayout(1, 4, 10, 10));
+        pn4.add(lbAgorithmMode);
+        pn4.add(cbAlgorithmMode);
+        pn4.setPreferredSize(new Dimension(0, 40));
+
 
 // chuoi
         JPanel pnSting = new JPanel();
@@ -207,6 +231,8 @@ public class AES_PANEL extends JPanel {
         pnContext.add(pnLoadKey);
         pnContext.add(Box.createRigidArea(new Dimension(0, 15)));//        margin
         pnContext.add(pnKeyInfo);
+        pnContext.add(Box.createRigidArea(new Dimension(0, 15)));//        margin
+        pnContext.add(pn4);
         pnContext.add(Box.createRigidArea(new Dimension(0, 15)));//        margin
         pnContext.add(pnSting);
         pnContext.add(Box.createRigidArea(new Dimension(0, 15)));//        margin
