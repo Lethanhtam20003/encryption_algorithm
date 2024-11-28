@@ -1,8 +1,8 @@
-package org.example.controler.MaHoaDoiXungController;
+package org.example.controler.symmetricEncryptionController;
 
 import org.example.model.CheckFile;
 import org.example.model.KeyManager;
-import org.example.model.MaHoaDoiXungModel.DES;
+import org.example.model.symmetricEncryptionModel.DES;
 import org.example.view.FileManager;
 import org.example.view.MaHoaDoiXungView.DES_PANEL;
 import org.example.view.custom.DialogNotification;

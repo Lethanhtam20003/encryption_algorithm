@@ -1,7 +1,7 @@
 package org.example.view.MaHoaDoiXungView;
 
-import org.example.controler.MaHoaDoiXungController.AESController;
-import org.example.model.MaHoaDoiXungModel.AES;
+import org.example.controler.symmetricEncryptionController.AESController;
+import org.example.model.symmetricEncryptionModel.AES;
 import org.example.view.custom.FontCustom;
 
 import javax.swing.*;

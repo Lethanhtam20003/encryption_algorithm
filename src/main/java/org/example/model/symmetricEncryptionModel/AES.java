@@ -1,4 +1,4 @@
-package org.example.model.MaHoaDoiXungModel;
+package org.example.model.symmetricEncryptionModel;
 
 import javax.crypto.*;
 import javax.crypto.spec.GCMParameterSpec;
