@@ -2,6 +2,7 @@ package org.example.model.classicalEncryption;
 
 import java.util.Arrays;
 import java.util.Random;
+import java.util.StringTokenizer;
 
 public class Hill {
     private static final int ALPHABET_SIZE = 26; // Số ký tự trong bảng chữ cái
@@ -179,11 +180,46 @@ public class Hill {
             System.out.println();
         }
         hill.loadKey(key);
+        System.out.println("s"+hill.printArr(key));
         String plaintext = "helloworlddsadasdasdasdsad";
         System.out.println("plaintext: " + plaintext);
         String encrypt = hill.encrypt(plaintext, key);
         System.out.println("encrypted: " + encrypt);
         String decrypt = hill.decrypt(encrypt, key);
         System.out.println("decrypted: " + decrypt);
+    }
+
+    public int[][] getKey() {
+        return this.key;
+    }
+
+    public String printArr(int[][] key) {
+        String sb ="";
+        for (int i = 0; i < key.length; i++) {
+            for (int j = 0; j < key.length; j++) {
+                sb += key[j][i]+",";
+            }
+            sb+="\n";
+        }
+        return sb;
+    }
+
+    public int[][] createKey(String load, int arrLen) {
+        StringTokenizer st = new StringTokenizer(load, ",");
+        int[][] res = new int[arrLen][arrLen];
+        for (int i = 0; i < arrLen; i++) {
+            for (int j = 0; j < arrLen; j++) {
+                if(!st.hasMoreTokens()){
+                    return null;
+                }
+                try {
+                    res[i][j] = Integer.parseInt(st.nextToken().trim());
+                }catch (NumberFormatException e){
+                    return null;
+                }
+
+            }
+        }
+        return res;
     }
 }

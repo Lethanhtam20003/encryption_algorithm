@@ -98,4 +98,8 @@ public class Substitution {
         System.out.println("ma hoa 'hai con cho':"+sub.encrypt("Hai Co-=n cho"));
         System.out.println("giai ma:"+sub.decrypt(sub.encrypt("Hai Con-= cho")));
     }
+
+    public String getKey() {
+        return key;
+    }
 }

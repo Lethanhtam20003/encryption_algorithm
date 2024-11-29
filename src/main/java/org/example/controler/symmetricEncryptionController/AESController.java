@@ -4,7 +4,7 @@ import org.example.model.CheckFile;
 import org.example.model.KeyManager;
 import org.example.model.symmetricEncryptionModel.AES;
 import org.example.view.FileManager;
-import org.example.view.MaHoaDoiXungView.AES_PANEL;
+import org.example.view.asymmetricEncryptionView.PANEL_AES;
 import org.example.view.custom.DialogNotification;
 
 import javax.crypto.BadPaddingException;
@@ -22,10 +22,10 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
 public class AESController implements ActionListener {
-    private AES_PANEL view;
+    private PANEL_AES view;
     private AES model;
     private Frame frame;
-    public AESController(AES_PANEL view, AES model, Frame frame) {
+    public AESController(PANEL_AES view, AES model, Frame frame) {
         this.view = view;
         this.model = model;
         this.frame = frame;

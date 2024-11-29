@@ -1,7 +1,8 @@
 package org.example.view;
 
-import org.example.view.MaHoaDoiXungView.AES_PANEL;
-import org.example.view.MaHoaDoiXungView.DES_PANEL;
+import org.example.view.asymmetricEncryptionView.*;
+import org.example.view.hashView.HashView;
+import org.example.view.symmetricEncryptionView.Panel_RSA;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,10 +30,10 @@ public class MainView extends JFrame {
         contentPane.setLayout(new BorderLayout());
         menu = new Menu(this);
         panelShow = new PanelContent();
-        panelShow.addPanelNew(new DES_PANEL(this));
+        panelShow.addPanelNew(new PANEL_DES(this));
 
         JPanel pnE = new JPanel();
-        pnE.add(Box.createRigidArea(new Dimension(300, 10)));
+        pnE.add(Box.createRigidArea(new Dimension(200, 10)));
 
         contentPane.add(menu, BorderLayout.WEST);
         contentPane.add(panelShow, BorderLayout.CENTER);
@@ -42,6 +43,11 @@ public class MainView extends JFrame {
 
 
         ActionListener menuListener = createActionMenu();
+        menu.getBtAffine().addActionListener(menuListener);
+        menu.getBtHill().addActionListener(menuListener);
+        menu.getBtCeasar().addActionListener(menuListener);
+        menu.getBtSubstitution().addActionListener(menuListener);
+        menu.getBtVigenere().addActionListener(menuListener);
         menu.getBtAES().addActionListener(menuListener);
         menu.getBtDES().addActionListener(menuListener);
         menu.getBtBlowfish().addActionListener(menuListener);
@@ -56,28 +62,59 @@ public class MainView extends JFrame {
         return new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 switch (e.getActionCommand()) {
-                    case "AES":
-                        AES_PANEL p = new AES_PANEL(MainView.this);
+                    case "Caesar":
+                        Panel_Caesar pn_Caesar = new Panel_Caesar(MainView.this);
                         panelShow.removePanelContainNow();
-                        panelShow.addPanelNew(p);
+                        panelShow.addPanelNew(pn_Caesar);
+                        break;
+                    case "Affine":
+                        Panel_Affine pn_Affine = new Panel_Affine(MainView.this);
+                        panelShow.removePanelContainNow();
+                        panelShow.addPanelNew(pn_Affine);
+                        break;
+                    case "Hill":
+                        Panel_Hill panelHill = new Panel_Hill(MainView.this);
+                        panelShow.removePanelContainNow();
+                        panelShow.addPanelNew(panelHill);
+                        break;
+                    case "Substitution":
+                        Panel_Substitution panelSubstitution = new Panel_Substitution(MainView.this);
+                        panelShow.removePanelContainNow();
+                        panelShow.addPanelNew(panelSubstitution);
+                        break;
+                    case "Vigenere":
+                        Panel_Vigenere panelVigenere = new Panel_Vigenere(MainView.this);
+                        panelShow.removePanelContainNow();
+                        panelShow.addPanelNew(panelVigenere);
+                        break;
+                    case "AES":
+                        PANEL_AES panelAes = new PANEL_AES(MainView.this);
+                        panelShow.removePanelContainNow();
+                        panelShow.addPanelNew(panelAes);
 
                         break;
                     case "DES":
-                        DES_PANEL p2 = new DES_PANEL(MainView.this);
+                        PANEL_DES panelDes = new PANEL_DES(MainView.this);
                         panelShow.removePanelContainNow();
-                        panelShow.addPanelNew(p2);
+                        panelShow.addPanelNew(panelDes);
                         break;
                     case "Blowfish":
 
                         break;
                     case "RSA":
-
+                        Panel_RSA panelRsa = new Panel_RSA(MainView.this);
+                        panelShow.removePanelContainNow();
+                        panelShow.addPanelNew(panelRsa);
                         break;
                     case "MD5":
-
+                        HashView hashView = new HashView(MainView.this,"MD5");
+                        panelShow.removePanelContainNow();
+                        panelShow.addPanelNew(hashView);
                         break;
-                    case "SHA":
-
+                    case "SHA-1":
+                        HashView sha = new HashView(MainView.this,"SHA");
+                        panelShow.removePanelContainNow();
+                        panelShow.addPanelNew(sha);
                         break;
                     case "FileChecksum":
 

@@ -1,7 +1,7 @@
-package org.example.view.MaHoaDoiXungView;
+package org.example.view.asymmetricEncryptionView;
 
-import org.example.controler.symmetricEncryptionController.AESController;
-import org.example.model.symmetricEncryptionModel.AES;
+import org.example.controler.symmetricEncryptionController.DESController;
+import org.example.model.symmetricEncryptionModel.DES;
 import org.example.view.custom.FontCustom;
 
 import javax.swing.*;
@@ -9,18 +9,18 @@ import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
-public class AES_PANEL extends JPanel {
-    private JLabel lbKeySizeShow,lbKeyInfoShow;
+public class PANEL_DES extends JPanel {
+    private final JLabel lbKeyInfoShow;
     private JTextField tfKeySize,tfGenKey,tfLoadKey,tfInputString,tfOutputString,tfInputFile,tfOutputFile;
     private JButton btGenKey,btnLoadKey,btEncryptString,btDecryptString,btEncryptFile,btDecryptFile,btKeySize,btChooseFile,btResultFile;
-    private AES model;
-    private AESController controller;
-
-    public AES_PANEL(Frame frame) {
-        model = new AES();
-        controller = new AESController(this, model,frame);
+    private DES model;
+    private DESController controller;
+    private int[] listKeySize = {56};
+    public PANEL_DES(Frame frame) {
+        model = new DES();
+        controller = new DESController(this, model, frame);
         this.setLayout(new BorderLayout());
-        JLabel title = new JLabel("Algorithm AES", JLabel.CENTER);
+        JLabel title = new JLabel("Algorithm DES", JLabel.CENTER);
         title.setFont(new FontCustom().titleFont);
         title.setPreferredSize(new Dimension(100,50));
         title.setHorizontalAlignment(SwingConstants.CENTER);
@@ -30,7 +30,7 @@ public class AES_PANEL extends JPanel {
         pnKeySize.add(new JLabel("Key Size:",SwingConstants.RIGHT));
         tfKeySize = new JTextField(20);
         tfKeySize.setEditable(false);
-        tfKeySize.setText(String.valueOf(model.listKeySize[0]));
+        tfKeySize.setText(String.valueOf(listKeySize[0]));
         btKeySize = new JButton("change Key Size");
 
         JPanel pn1 = new JPanel(new GridLayout(1,2,10,10));
@@ -64,14 +64,12 @@ public class AES_PANEL extends JPanel {
 // key information
         JLabel lbkeyInfo = new JLabel("Key actived:", SwingConstants.RIGHT);
         lbKeyInfoShow = new JLabel("...", SwingConstants.LEFT);
-
         lbkeyInfo.setFont(new FontCustom().titleFont3);
         lbKeyInfoShow.setFont(new FontCustom().titleFont3);
-
         JPanel pnKeyInfo = new JPanel(new GridLayout(1,4,10,10));
         pnKeyInfo.add(lbkeyInfo);
         pnKeyInfo.add(lbKeyInfoShow);
-        // algorithm mode
+// algorithm mode
         JLabel lbAgorithmMode = new JLabel("Agorithm Mode:", SwingConstants.RIGHT);
         lbAgorithmMode.setFont(new FontCustom().titleFont3);
         JComboBox<String> cbAlgorithmMode = new JComboBox<>(model.getListAlorithm());
@@ -91,7 +89,6 @@ public class AES_PANEL extends JPanel {
         pn4.add(lbAgorithmMode);
         pn4.add(cbAlgorithmMode);
         pn4.setPreferredSize(new Dimension(0, 40));
-
 
 // chuoi
         JPanel pnSting = new JPanel();
@@ -231,37 +228,13 @@ public class AES_PANEL extends JPanel {
         pnContext.add(pnLoadKey);
         pnContext.add(Box.createRigidArea(new Dimension(0, 15)));//        margin
         pnContext.add(pnKeyInfo);
-        pnContext.add(Box.createRigidArea(new Dimension(0, 15)));//        margin
+        pnContext.add(Box.createRigidArea(new Dimension(0, 15)));//
         pnContext.add(pn4);
         pnContext.add(Box.createRigidArea(new Dimension(0, 15)));//        margin
         pnContext.add(pnSting);
         pnContext.add(Box.createRigidArea(new Dimension(0, 15)));//        margin
         pnContext.add(pnFile);
         this.add(pnContext, BorderLayout.CENTER);
-    }
-
-    public JLabel getLbKeySizeShow() {
-        return lbKeySizeShow;
-    }
-
-    public void setLbKeySizeShow(JLabel lbKeySizeShow) {
-        this.lbKeySizeShow = lbKeySizeShow;
-    }
-
-    public JLabel getLbKeyInfoShow() {
-        return lbKeyInfoShow;
-    }
-
-    public void setLbKeyInfoShow(JLabel lbKeyInfoShow) {
-        this.lbKeyInfoShow = lbKeyInfoShow;
-    }
-
-    public JTextField getTfKeySize() {
-        return tfKeySize;
-    }
-
-    public void setTfKeySize(JTextField tfKeySize) {
-        this.tfKeySize = tfKeySize;
     }
 
     public JTextField getTfGenKey() {
@@ -310,6 +283,14 @@ public class AES_PANEL extends JPanel {
 
     public void setTfOutputFile(JTextField tfOutputFile) {
         this.tfOutputFile = tfOutputFile;
+    }
+
+    public JTextField getTfKeySize() {
+        return tfKeySize;
+    }
+
+    public void setTfKeySize(JTextField tfKeySize) {
+        this.tfKeySize = tfKeySize;
     }
 
     public JButton getBtGenKey() {
@@ -368,35 +349,31 @@ public class AES_PANEL extends JPanel {
         this.btKeySize = btKeySize;
     }
 
-    public JButton getBtChooseFile() {
-        return btChooseFile;
+    public int[] getListKeySize() {
+        return listKeySize;
     }
 
-    public void setBtChooseFile(JButton btChooseFile) {
-        this.btChooseFile = btChooseFile;
+    public void setListKeySize(int[] listKeySize) {
+        this.listKeySize = listKeySize;
     }
 
-    public JButton getBtResultFile() {
-        return btResultFile;
+    public JLabel getLbKeyInfoShow() {
+        return lbKeyInfoShow;
     }
 
-    public void setBtResultFile(JButton btResultFile) {
-        this.btResultFile = btResultFile;
-    }
-
-    public AES getModel() {
+    public DES getModel() {
         return model;
     }
 
-    public void setModel(AES model) {
+    public void setModel(DES model) {
         this.model = model;
     }
 
-    public AESController getController() {
+    public DESController getController() {
         return controller;
     }
 
-    public void setController(AESController controller) {
+    public void setController(DESController controller) {
         this.controller = controller;
     }
 }

@@ -12,7 +12,7 @@ public class Vigenere{
         Random rand = new Random();
         for(int i = 0; i < num; i++) {
             char a = alphabet.charAt(rand.nextInt(alphabet.length()));
-            newKey.append((char) a);
+            newKey.append(a);
         }
         return newKey.toString(); // Lấy độ dài phù hợp
     }
@@ -81,5 +81,9 @@ public class Vigenere{
         System.out.println("cipherText: "+ cipherText);
         String decryptedText = vigenere.decrypt(cipherText);
         System.out.println("decryptedText: "+ decryptedText);
+    }
+
+    public String getKey() {
+        return this.key;
     }
 }

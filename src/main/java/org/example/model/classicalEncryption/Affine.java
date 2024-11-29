@@ -21,7 +21,7 @@ public class Affine {
         return new int[]{a, b}; // Trả về mảng chứa cặp khóa {a, b}
     }
     public boolean loadKey(int[] arr){
-        if (!isCoPrime(arr[1])) {
+        if (!isCoPrime(arr[0])) {
             return false;
         }
         if (arr[0]>26 || arr[1]>26) {
@@ -32,14 +32,14 @@ public class Affine {
     }
 
     // Hàm mã hóa Affine Cipher
-    public  String encrypt(String plaintext, int a, int b) {
+    public  String encrypt(String plaintext) {
         StringBuilder ciphertext = new StringBuilder();
         for (char c : plaintext.toCharArray()) {
             if (Character.isLetter(c)) {
                 boolean isUpper = Character.isUpperCase(c);
                 int base = isUpper ? 'A' : 'a';
                 int x = c - base;
-                int encrypted = (a * x + b) % ALPHABET_SIZE;
+                int encrypted = (key[0]* x + key[1]) % ALPHABET_SIZE;
                 ciphertext.append((char) (encrypted + base));
             } else {
                 ciphertext.append(c); // Giữ nguyên ký tự không phải chữ cái
@@ -49,15 +49,15 @@ public class Affine {
     }
 
     // Hàm giải mã Affine Cipher
-    public  String decrypt(String ciphertext, int a, int b) {
-        int aInverse = modInverse(a); // modulo
+    public  String decrypt(String ciphertext) {
+        int aInverse = modInverse(key[0]); // modulo
         StringBuilder plaintext = new StringBuilder();
         for (char c : ciphertext.toCharArray()) {
             if (Character.isLetter(c)) {
                 boolean isUpper = Character.isUpperCase(c);
                 int base = isUpper ? 'A' : 'a';
                 int cVal = c - base;
-                int decrypted = (aInverse * (cVal - b + ALPHABET_SIZE)) % ALPHABET_SIZE;
+                int decrypted = (aInverse * (cVal - key[1] + ALPHABET_SIZE)) % ALPHABET_SIZE;
                 plaintext.append((char) (decrypted + base));
             } else {
                 plaintext.append(c); // Giữ nguyên ký tự không phải chữ cái
@@ -91,17 +91,26 @@ public class Affine {
         return a;
     }
 
+
+    public int[] getKey() {
+        return key;
+    }
+
+    public void setKey(int[] key) {
+        this.key = key;
+    }
+
     public static void main(String[] args) {
         Affine affine = new Affine();
         String plaintext = "Khoa Cong Nghe Thong Tin";
         int a = 7, b = 3; // Các tham số mã hóa
 
         // Mã hóa
-        String encrypted = affine.encrypt(plaintext, a, b);
+        String encrypted = affine.encrypt(plaintext );
         System.out.println("Văn bản sau mã hóa: " + encrypted);
 
         // Giải mã
-        String decrypted = affine.decrypt(encrypted, a, b);
+        String decrypted = affine.decrypt(encrypted );
         System.out.println("Văn bản sau giải mã: " + decrypted);
     }
 }

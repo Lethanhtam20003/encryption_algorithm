@@ -4,7 +4,7 @@ import org.example.model.CheckFile;
 import org.example.model.KeyManager;
 import org.example.model.symmetricEncryptionModel.DES;
 import org.example.view.FileManager;
-import org.example.view.MaHoaDoiXungView.DES_PANEL;
+import org.example.view.asymmetricEncryptionView.PANEL_DES;
 import org.example.view.custom.DialogNotification;
 
 import javax.crypto.BadPaddingException;
@@ -21,10 +21,10 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
 public class DESController implements ActionListener {
-    private DES_PANEL view;
+    private PANEL_DES view;
     private DES model;
     private Frame frame;
-    public DESController(DES_PANEL aesView, DES desModel, Frame frame) {
+    public DESController(PANEL_DES aesView, DES desModel, Frame frame) {
         this.frame = frame;
         this.view = aesView;
         this.model = desModel;
