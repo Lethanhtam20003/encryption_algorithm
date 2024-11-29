@@ -9,9 +9,11 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class MD5 {
+    private final String[] listAlgorithm = { "MD5", "SHA-1", "SHA-256", "SHA-384",""};
+    private String algorithm = "MD5";
     public String hash(String data) throws  NoSuchAlgorithmException {
 //        khoi tao MessageDigiest voi thuat toan MD5
-        MessageDigest md = MessageDigest.getInstance("MD5");
+        MessageDigest md = MessageDigest.getInstance(algorithm);
 //        chuyen chuoi dua vao thang mang byte
         byte[] bytes = data.getBytes();
 //        bam
@@ -23,7 +25,7 @@ public class MD5 {
 
     public String hashFile(String src) throws Exception {
 //        khoi tao MessageDigiest voi thuat toan MD5
-        MessageDigest md = MessageDigest.getInstance("MD5");
+        MessageDigest md = MessageDigest.getInstance(algorithm);
 //        Kiem tra co ton tai file khong
         File file = new File(src);
         if(!file.exists()) return null;
