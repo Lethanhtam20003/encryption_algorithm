@@ -4,26 +4,81 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.*;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 
 public class DigitalSign {
     KeyPair keyPair;
     SecureRandom random;
     Signature signature;
-    PublicKey publicKey;
-    PrivateKey privateKey;
-    public DigitalSign() {}
-    public DigitalSign(String alg,String algRamdom,String prov) throws NoSuchAlgorithmException, NoSuchProviderException {
-        KeyPairGenerator keyGen= KeyPairGenerator.getInstance(alg,prov);
-        random = SecureRandom.getInstance(algRamdom,prov);
+    private PublicKey publicKey;
+    private PrivateKey privateKey;
+
+    private String[] listDigitalSignatureAlgorithm = {"DSA","RSA",};
+    private String digitalSignatureAlgorithm = listDigitalSignatureAlgorithm[0];
+    private String[] listRandomNumberGenerationAlgorithm = {"SHA1PRNG","NativePRNG","NativePRNGBlocking","NativePRNGNonBlocking"};
+    private String randomNumberGenerationAlgorithm = listRandomNumberGenerationAlgorithm[0];
+    private String algorithmProvider = "SUN";
+
+    public DigitalSign()  {
+        KeyPairGenerator keyGen= null;
+        try {
+            keyGen = KeyPairGenerator.getInstance(digitalSignatureAlgorithm,algorithmProvider);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchProviderException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            random = SecureRandom.getInstance(randomNumberGenerationAlgorithm,algorithmProvider);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchProviderException e) {
+            throw new RuntimeException(e);
+        }
         keyGen.initialize(1024,random);
         keyPair = keyGen.genKeyPair();
-        signature = Signature.getInstance(alg,prov);
+        try {
+            signature = Signature.getInstance(digitalSignatureAlgorithm,algorithmProvider);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchProviderException e) {
+            throw new RuntimeException(e);
+        }
     }
-    public void genKey(){
+    public PublicKey genPublicKey(){
         if(keyPair!=null){
-            publicKey = keyPair.getPublic();
-            privateKey = keyPair.getPrivate();
+            return keyPair.getPublic();
+        }
+        return null;
+    }
+    public PrivateKey genPrivateKey(){
+        if(keyPair!=null){
+            return keyPair.getPrivate();
+        }
+        return null;
+    }
+    public boolean LoadPublicKey(String key){
+        try {
+            byte[] keyBytes = Base64.getDecoder().decode(key);
+            KeyFactory keyFactory = KeyFactory.getInstance(digitalSignatureAlgorithm);
+            publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(keyBytes));
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public boolean LoadPrivateKey(String key){
+        try {
+            byte[] keyBytes = Base64.getDecoder().decode(key);
+            KeyFactory keyFactory = KeyFactory.getInstance(digitalSignatureAlgorithm);
+            privateKey = keyFactory.generatePrivate(new PKCS8EncodedKeySpec(keyBytes));
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
     }
     public String sign(String mes) throws SignatureException, InvalidKeyException {
@@ -64,10 +119,70 @@ public class DigitalSign {
         byte[] signValue = Base64.getDecoder().decode(sign);
         return signature.verify(signValue);
     }
+    public String keyToString(Key key){
+        return Base64.getEncoder().encodeToString(key.getEncoded());
+    }
+
+    public PublicKey getPublicKey() {
+        return publicKey;
+    }
+
+    public void setPublicKey(PublicKey publicKey) {
+        this.publicKey = publicKey;
+    }
+
+    public PrivateKey getPrivateKey() {
+        return privateKey;
+    }
+
+    public void setPrivateKey(PrivateKey privateKey) {
+        this.privateKey = privateKey;
+    }
+
+    public String getAlgorithmProvider() {
+        return algorithmProvider;
+    }
+
+    public void setAlgorithmProvider(String algorithmProvider) {
+        this.algorithmProvider = algorithmProvider;
+    }
+
+    public String getRandomNumberGenerationAlgorithm() {
+        return randomNumberGenerationAlgorithm;
+    }
+
+    public void setRandomNumberGenerationAlgorithm(String randomNumberGenerationAlgorithm) {
+        this.randomNumberGenerationAlgorithm = randomNumberGenerationAlgorithm;
+    }
+
+    public String[] getListRandomNumberGenerationAlgorithm() {
+        return listRandomNumberGenerationAlgorithm;
+    }
+
+    public void setListRandomNumberGenerationAlgorithm(String[] listRandomNumberGenerationAlgorithm) {
+        this.listRandomNumberGenerationAlgorithm = listRandomNumberGenerationAlgorithm;
+    }
+
+    public String getDigitalSignatureAlgorithm() {
+        return digitalSignatureAlgorithm;
+    }
+
+    public void setDigitalSignatureAlgorithm(String digitalSignatureAlgorithm) {
+        this.digitalSignatureAlgorithm = digitalSignatureAlgorithm;
+    }
+
+    public String[] getListDigitalSignatureAlgorithm() {
+        return listDigitalSignatureAlgorithm;
+    }
+
+    public void setListDigitalSignatureAlgorithm(String[] listDigitalSignatureAlgorithm) {
+        this.listDigitalSignatureAlgorithm = listDigitalSignatureAlgorithm;
+    }
 
     public static void main(String[] args) throws NoSuchAlgorithmException, NoSuchProviderException, SignatureException, InvalidKeyException, IOException {
-        DigitalSign ds = new DigitalSign("DSA","SHA1PRNG","SUN");
-        ds.genKey();
+        DigitalSign ds = new DigitalSign( );
+        ds.genPublicKey();
+        ds.genPrivateKey();
 //        String sign = ds.sign("heloo");
 //        System.out.println(sign);
 //        boolean verify = ds.verify("heloo",sign);

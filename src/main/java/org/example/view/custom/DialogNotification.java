@@ -16,7 +16,7 @@ public class DialogNotification extends JDialog {
         this.setLayout(new BorderLayout());
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        lblTitle = new JLabel("Notification !");
+        lblTitle = new JLabel(title);
         lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
 
         // Nội dung của JDialog

@@ -21,6 +21,11 @@ public class Blowfish {
     private final int[] listKeySize = {32,128,256,448};
     private int keySize = listKeySize[1];
     private IvParameterSpec ivSpec;
+
+    public Blowfish() {
+        this.ivSpec = genIv();
+    }
+
     public SecretKey genKey() throws NoSuchAlgorithmException {
         KeyGenerator keyGen = KeyGenerator.getInstance("Blowfish");
         keyGen.init(128);
@@ -83,6 +88,7 @@ public class Blowfish {
         return Base64.getEncoder().encodeToString(encryptedData);
     }
 
+
     // Hàm giải mã
     public String decryptStr(String encryptedData) throws Exception {
         Cipher cipher = Cipher.getInstance(algorithm);
@@ -142,6 +148,54 @@ public class Blowfish {
         return true;
     }
 
+    public SecretKey getKey() {
+        return key;
+    }
+
+    public void setKey(SecretKey key) {
+        this.key = key;
+    }
+
+    public Cipher getCipher() {
+        return cipher;
+    }
+
+    public void setCipher(Cipher cipher) {
+        this.cipher = cipher;
+    }
+
+    public String[] getListAlgorithms() {
+        return listAlgorithms;
+    }
+
+    public String getAlgorithm() {
+        return algorithm;
+    }
+
+    public void setAlgorithm(String algorithm) {
+        this.algorithm = algorithm;
+    }
+
+    public int[] getListKeySize() {
+        return listKeySize;
+    }
+
+    public int getKeySize() {
+        return keySize;
+    }
+
+    public void setKeySize(int keySize) {
+        this.keySize = keySize;
+    }
+
+    public IvParameterSpec getIvSpec() {
+        return ivSpec;
+    }
+
+    public void setIvSpec(IvParameterSpec ivSpec) {
+        this.ivSpec = ivSpec;
+    }
+
     public static void main(String[] args) throws Exception {
         Blowfish blowfish = new Blowfish();
         SecretKey key = blowfish.genKey();
@@ -156,4 +210,19 @@ public class Blowfish {
 //        System.out.println(decrypted);
 
     }
+
+    public SecretKey stringToSecretKey(String load) {
+        try {
+            // Giải mã chuỗi Base64 thành byte[]
+            byte[] keyBytes = Base64.getDecoder().decode(load);
+
+            // Tạo đối tượng SecretKeySpec từ byte[] với thuật toán "Blowfish"
+            return new SecretKeySpec(keyBytes, "Blowfish");
+        } catch (IllegalArgumentException e) {
+            System.err.println("Lỗi: Chuỗi không hợp lệ hoặc không đúng định dạng Base64.");
+            return null;
+        }
+    }
+
+
 }

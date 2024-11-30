@@ -22,7 +22,7 @@ public class Panel_Vigenere extends JPanel {
         controller = new VigenereController(this,model,frame);
 
         this.setLayout(new BorderLayout());
-        JLabel title = new JLabel("Algorithm Caesar", JLabel.CENTER);
+        JLabel title = new JLabel("Algorithm Vigenere", JLabel.CENTER);
         title.setFont(new FontCustom().titleFont);
         title.setPreferredSize(new Dimension(100,50));
         title.setHorizontalAlignment(SwingConstants.CENTER);

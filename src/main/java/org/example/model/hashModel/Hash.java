@@ -7,7 +7,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class Hash {
-    private final String[] listAlgorithm = { "MD5", "SHA-1", "SHA-256", "SHA-384",""};
+    private final String[] listAlgorithm = { "MD5", "SHA-1", "SHA-256", "SHA-384"};
     private String algorithm = listAlgorithm[0];
     public String hash(String data) throws  NoSuchAlgorithmException {
 //        khoi tao MessageDigiest voi thuat toan MD5

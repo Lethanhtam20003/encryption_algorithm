@@ -1,12 +1,12 @@
 package org.example.view;
 
-import org.example.model.classicalEncryption.Caesar;
-
 import javax.swing.*;
 import java.awt.*;
 
 public class Menu extends JPanel {
-    private JButton btCeasar,btAffine,btHill,btSubstitution,btVigenere,btDES,btAES,btBlowfish,btRSA,btMD5,btSHA,btKeyDigital,btFileChecksum;
+    private JButton btCeasar,btAffine,btHill,btSubstitution,btVigenere,btDES,btAES
+            ,btBlowfish,btRSA,btMD5,btSHA,btKeyDigital,btFileChecksum,
+            btSHA_256,btSHA_384;
 
     public Menu(Frame frame) {
 
@@ -63,12 +63,16 @@ public class Menu extends JPanel {
 //        4
         btMD5 = new JButton("MD5");
         btSHA = new JButton("SHA-1");
+        btSHA_256 = new JButton("SHA-256");
+        btSHA_384 = new JButton("SHA-384");
 
         JPanel panel4 = new JPanel();
         panel4.setLayout(new BoxLayout(panel4, BoxLayout.Y_AXIS));
         panel4.add(lb4);
         panel4.add(btMD5);
         panel4.add(btSHA);
+        panel4.add(btSHA_256);
+        panel4.add(btSHA_384);
 
         panel4.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 //        5
@@ -80,14 +84,14 @@ public class Menu extends JPanel {
 
         panel5.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 //        6
-        btFileChecksum = new JButton("file checksum");
+//        btFileChecksum = new JButton("file checksum");
+//
+//        JPanel panel6 = new JPanel();
+//        panel6.setLayout(new BoxLayout(panel6, BoxLayout.Y_AXIS));
+//        panel6.add(lb6);
+//        panel6.add(btFileChecksum);
 
-        JPanel panel6 = new JPanel();
-        panel6.setLayout(new BoxLayout(panel6, BoxLayout.Y_AXIS));
-        panel6.add(lb6);
-        panel6.add(btFileChecksum);
-
-        panel6.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+//        panel6.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
         JPanel panel = new JPanel(new GridLayout(6, 1));
         panel.add(panel1);
@@ -95,12 +99,36 @@ public class Menu extends JPanel {
         panel.add(panel3);
         panel.add(panel4);
         panel.add(panel5);
-        panel.add(panel6);
+//        panel.add(panel6);
 
         JScrollPane jsbTotal = new JScrollPane(panel);
 
         this.add(jsbTotal);
 
+    }
+
+    public JButton getBtSHA_256() {
+        return btSHA_256;
+    }
+
+    public void setBtSHA_256(JButton btSHA_256) {
+        this.btSHA_256 = btSHA_256;
+    }
+
+    public JButton getBtSHA_384() {
+        return btSHA_384;
+    }
+
+    public void setBtSHA_384(JButton btSHA_384) {
+        this.btSHA_384 = btSHA_384;
+    }
+
+    public JButton getBtKeyDigital() {
+        return btKeyDigital;
+    }
+
+    public void setBtKeyDigital(JButton btKeyDigital) {
+        this.btKeyDigital = btKeyDigital;
     }
 
     public JButton getBtCeasar() {

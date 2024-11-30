@@ -155,6 +155,54 @@ public class DESede {
         return true;
     }
 
+    public SecretKey getKey() {
+        return key;
+    }
+
+    public void setKey(SecretKey key) {
+        this.key = key;
+    }
+
+    public Cipher getCipher() {
+        return cipher;
+    }
+
+    public void setCipher(Cipher cipher) {
+        this.cipher = cipher;
+    }
+
+    public String[] getListAlgorithms() {
+        return listAlgorithms;
+    }
+
+    public String getAlgorithm() {
+        return algorithm;
+    }
+
+    public void setAlgorithm(String algorithm) {
+        this.algorithm = algorithm;
+    }
+
+    public int[] getListKeySize() {
+        return listKeySize;
+    }
+
+    public int getKeySize() {
+        return keySize;
+    }
+
+    public void setKeySize(int keySize) {
+        this.keySize = keySize;
+    }
+
+    public IvParameterSpec getIvSpec() {
+        return ivSpec;
+    }
+
+    public void setIvSpec(IvParameterSpec ivSpec) {
+        this.ivSpec = ivSpec;
+    }
+
     public static void main(String[] args) throws Exception {
         DESede desede = new DESede();
         SecretKey key = desede.genKey();

@@ -1,6 +1,7 @@
 package org.example.view;
 
 import org.example.view.asymmetricEncryptionView.*;
+import org.example.view.digitalSign.PanelDigitalSign;
 import org.example.view.hashView.HashView;
 import org.example.view.symmetricEncryptionView.Panel_RSA;
 
@@ -54,13 +55,17 @@ public class MainView extends JFrame {
         menu.getBtRSA().addActionListener(menuListener);
         menu.getBtMD5().addActionListener(menuListener);
         menu.getBtSHA().addActionListener(menuListener);
-        menu.getBtFileChecksum().addActionListener(menuListener);
+        menu.getBtSHA_256().addActionListener(menuListener);
+        menu.getBtSHA_384().addActionListener(menuListener);
+//        menu.getBtFileChecksum().addActionListener(menuListener);
+        menu.getBtKeyDigital().addActionListener(menuListener);
 
     }
 
     private ActionListener createActionMenu() {
         return new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                System.out.println(e.getActionCommand());
                 switch (e.getActionCommand()) {
                     case "Caesar":
                         Panel_Caesar pn_Caesar = new Panel_Caesar(MainView.this);
@@ -99,7 +104,9 @@ public class MainView extends JFrame {
                         panelShow.addPanelNew(panelDes);
                         break;
                     case "Blowfish":
-
+                        Panel_Blowfish panelBlowfish = new Panel_Blowfish(MainView.this);
+                        panelShow.removePanelContainNow();
+                        panelShow.addPanelNew(panelBlowfish);
                         break;
                     case "RSA":
                         Panel_RSA panelRsa = new Panel_RSA(MainView.this);
@@ -115,6 +122,21 @@ public class MainView extends JFrame {
                         HashView sha = new HashView(MainView.this,"SHA");
                         panelShow.removePanelContainNow();
                         panelShow.addPanelNew(sha);
+                        break;
+                    case "SHA-256":
+                        HashView sha256 = new HashView(MainView.this,"SHA-256");
+                        panelShow.removePanelContainNow();
+                        panelShow.addPanelNew(sha256);
+                        break;
+                    case "SHA-384":
+                        HashView sha384 = new HashView(MainView.this,"SHA-384");
+                        panelShow.removePanelContainNow();
+                        panelShow.addPanelNew(sha384);
+                        break;
+                    case "Key Digital":
+                        PanelDigitalSign digitalSign = new PanelDigitalSign(MainView.this);
+                        panelShow.removePanelContainNow();
+                        panelShow.addPanelNew(digitalSign);
                         break;
                     case "FileChecksum":
 
